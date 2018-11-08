@@ -8,8 +8,7 @@ using System.Web;
 
 namespace CustomerService_Web_Api.Models
 {
-    public class PersonDB
-    {
+    
         public class PersonDb
         {
             [Key]
@@ -40,12 +39,14 @@ namespace CustomerService_Web_Api.Models
             public string Category { get; set; }
         }
 
-        public class PersonContext : DbContext
+        public class QAContext : DbContext
         {
-            public PersonContext()
+            public QAContext()
                 : base("name=DatabaseService")
             {
+
                 Database.CreateIfNotExists();
+                
             }
 
             public DbSet<PersonDb> Personer { get; set; }
@@ -57,5 +58,5 @@ namespace CustomerService_Web_Api.Models
                 modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             }
         }
-    }
+    
 }

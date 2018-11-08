@@ -3,13 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using static CustomerService_Web_Api.Models.PersonDB;
+
 
 namespace CustomerService_Web_Api.Models
 {
     public class DB
     {
-        PersonContext db = new PersonContext();
+        QAContext db = new QAContext();
 
 
         public List<QandA> getAllQuestions()
@@ -37,6 +37,7 @@ namespace CustomerService_Web_Api.Models
                 // spørsmål til  databasen
                 newQuestion.Question = innQuestion.Question;
                 newQuestion.Answer = "";
+                newQuestion.Category = innQuestion.Category;
 
                 db.QandAs.Add(newQuestion);
                 db.SaveChanges();
@@ -71,6 +72,22 @@ namespace CustomerService_Web_Api.Models
         }
 
 
+        
+
+        public void deleteQuestion(int id)
+        {
+            try
+            {
+                QA questionToDelete = db.QandAs.FirstOrDefault(p => p.Id == id);
+
+                db.QandAs.Remove(questionToDelete);
+                db.SaveChanges();
+            }
+            catch (Exception feil)
+            {
+
+            }
+        }
 
 
 
@@ -79,9 +96,6 @@ namespace CustomerService_Web_Api.Models
 
 
 
-
-
-      
         //public Person hentEnPerson(int id)
         //{
         //    bool funnetPerson = db.Personer.Any(p => p.Id == id);
@@ -179,18 +193,6 @@ namespace CustomerService_Web_Api.Models
 
         //    }
         //}
-        //public void slettPerson(int id)
-        //{
-        //    try
-        //    {
-        //        PersonDb slettPerson = db.Personer.FirstOrDefault(p => p.Id == id);
-        //        db.Personer.Remove(slettPerson);
-        //        db.SaveChanges();
-        //    }
-        //    catch (Exception feil)
-        //    {
 
-        //    }
-        //}
     }
 }

@@ -28,11 +28,18 @@ namespace CustomerService_Web_Api.Controllers
         
         public List<QandA> Post(QandA newQuestion)
         {
-            
-                
             db.savequestion(newQuestion);
             return db.getAllQuestions();
         }
+
+        // DELETE api/Person/5
+        public List<QandA> Delete(int id)
+        {
+            Debug.WriteLine(id);
+            db.deleteQuestion(id);
+            return db.getAllQuestions();
+        }
+
 
         //public List<QandA> Post(QandA newquestion)
         //{
@@ -80,11 +87,6 @@ namespace CustomerService_Web_Api.Controllers
         //    return db.hentAllePersoner();
         //}
 
-        //// DELETE api/Person/5
-        //public List<Person> Delete(int id)
-        //{
-        //    db.slettPerson(id);
-        //    return db.hentAllePersoner();
-        //}
+
     }
 }

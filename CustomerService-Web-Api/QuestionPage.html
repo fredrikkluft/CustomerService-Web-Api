@@ -1,0 +1,208 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+
+
+    <script src="Scripts/jquery-3.3.1.min.js"></script>
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+    <script src="../Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="Scripts/bootstrap.bundle.min.js"></script>
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="Content/Simple-sidebar.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="wrapper" class="toggled">
+
+
+
+        <!-- Sidebar -->
+        <div class="float-md-right" id="sidebar-wrapper">
+
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Kundeservice Web-Api
+                    </a>
+                </li>
+                <li>
+                    <a href="index.html">Spørsmål og svar</a>
+                </li>
+                <li>
+
+                    <a href="QuestionPage.html">Send inn spørsmål</a>
+                </li>
+                <li>
+
+                    <a href="Administration.html">Administrer spørsmål</a>
+                </li>
+
+
+
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <!--<a href="#page-content-wrapper" class="btn btn-primary" id="fixedbutton">Til toppen</a>-->
+
+        <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Meny</a>
+
+
+        <div id="page-content-wrapper">
+
+            <div class="row">
+
+
+                <div class="col-8">
+                    <div class="tab-content" id="nav-tabContent">
+                        <br />
+                        <div class="border" id="sendquestion">
+                            <h1 class="display-5">Vennligst fyll ut skjema</h1>
+
+
+
+                            <div class="row">
+                                <div class="border" > <p id="questionsent" style="display:none">Takk for at du sendte inn spørsmål. Du blir automatisk sendt videre!<p/></div>
+                            </div>
+
+                            <table class="table table-bordered" style="border:1px solid black">
+
+                                <tr>
+                                    <td>Velg Kategori:</td>
+                                    <td>
+                                        <select name="Kategori" id="categoryvalue">
+                                            <option value="Account">Konto</option>
+                                            <option value="Order">Ordre</option>
+                                            <option value="Movies">Filmer</option>
+                                            <option value="Other">Annet</option>
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Skriv ditt spørsmål her: </td>
+                                    <td>
+                                        <textarea id="newquestion" rows="4" cols="50"></textarea>
+                                        <div><button onclick="Savequestion()" class="btn btn-primary">Send</button><p id="waiting" style="display:none">Sender spørsmål, vennligst vent......</p></div>
+                                    </td>
+                                </tr>
+
+
+                            </table>
+
+                        </div>
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div> <!--Denne avslutter wrapper-->
+
+    <script>
+        function hidequestionform() {
+            var x = document.getElementById("sendquestion");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+
+            } else {
+                x.style.display = "none";
+            }
+        }
+    </script>
+
+    <script>
+        function Showmsg() {
+            var x = document.getElementById("questionsent");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+                
+
+            } else {
+                x.style.display = "none";
+
+            }
+        }
+    </script>
+
+    <script>
+        function Waitingmsg() {
+            var y = document.getElementById("waiting");
+            if (y.style.display === "none") {
+                y.style.display = "block";
+                setTimeout("Waitingmsg", 4000);
+
+            } else {
+                y.style.display = "none";
+                
+                
+            }
+        }
+    </script>
+
+
+
+
+
+
+    <script type="text/javascript">
+
+        function Savequestion() {
+
+
+            Waitingmsg();
+
+            
+
+            //var newQuestion = $('#newquestion').val();
+            var newQuestion = {
+                Question: $('#newquestion').val(), Category: $('#categoryvalue').val()
+            };
+
+            $.ajax({
+                url: '/api/Api/',
+                type: 'POST',
+                data: JSON.stringify(newQuestion),
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+
+                    
+
+                    setTimeout("hidequestionform()", 4000);
+                    location.href = "index.html";
+                    
+                    
+                    
+                    
+
+
+
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                }
+            });
+            
+
+
+        }
+    </script>
+
+    <!--Gjemmer sidemeny ved klikk-->
+    <script>
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    </script>
+
+
+
+</body>
+</html>

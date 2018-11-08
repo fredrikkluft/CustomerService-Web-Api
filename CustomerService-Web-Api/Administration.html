@@ -1,0 +1,204 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+
+
+    <script src="Scripts/jquery-3.3.1.min.js"></script>
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+    <script src="../Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="Scripts/bootstrap.bundle.min.js"></script>
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="Content/Simple-sidebar.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="wrapper" class="toggled">
+
+
+
+        <!-- Sidebar -->
+        <div class="float-md-right" id="sidebar-wrapper">
+
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Kundeservice Web-Api
+                    </a>
+                </li>
+                <li>
+                    <a href="index.html">Spørsmål og svar</a>
+                </li>
+                <li>
+
+                    <a href="QuestionPage.html">Send inn spørsmål</a>
+                </li>
+                <li>
+
+                    <a href="Administration.html">Administrer spørsmål</a>
+                </li>
+
+
+
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <!--<a href="#page-content-wrapper" class="btn btn-primary" id="fixedbutton">Til toppen</a>-->
+
+        <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Meny</a>
+
+
+        <div id="page-content-wrapper">
+
+            <div class="row">
+                <div class="container">
+                    <h2>Personregister via WEB-API REST</h2>
+                    <div>
+                        <table class="table table-bordered">
+                            <tr><td>Fornavn:</td><td><input type="text" id="txtFornavn" /></td></tr>
+                            <tr><td>Etternavn:</td><td><input type="text" id="txtEtternavn" /></td></tr>
+                            <tr><td>Adresse:</td><td><input type="text" id="txtAdresse" /></td></tr>
+                            <tr><td>Postnr:</td><td><input type="text" id="txtPostnr" /></td></tr>
+                            <tr><td>Poststed:</td><td><input type="text" id="txtPoststed" /></td></tr>
+                            <tr><td>Telefonnr:</td><td><input type="text" id="txtTelefonnr" /></td></tr>
+                            <tr><td>Epost:</td><td><input type="text" id="txtEpost" /></td></tr>
+                        </table>
+                        <button onclick="LeggTilPerson()" class="btn btn-primary">Legg til person</button>
+                        <button onclick="HentAllePersoner()" class="btn btn-primary">Vis alle</button><br /><br />
+                        <button onclick="HentPerson()" class="btn btn-primary">Vis Person</button> Person ID <input type="text" id="txtPersId" />
+                        <button onclick="deleteQuestion()" class="btn btn-danger">Slett Person</button> Person ID <input type="text" id="txtSlettId" />
+                    </div>
+
+                    <h3>Dataene returnert fra Web API:</h3>
+                    <div id="divResult"></div>
+
+                </div>
+
+
+
+            </div>
+        </div>
+
+    </div> <!--Denne avslutter wrapper-->
+
+
+    <script type="text/javascript">
+        $(function () {
+            GetAllQuestions();
+        });
+
+        function GetAllQuestions() {
+            $.ajax({
+                url: '/api/Api',
+                type: 'GET',
+                success: function (data) {
+
+                    GetAll(data);
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                }
+            });
+        }
+
+        function GetAll(QandAs) {
+            var strResult = "<table class='table table-boarded'><tr><th>Id</th><th>Spørsmål</th><th>Svar</th><th>Kategori</th></tr>";
+
+
+            $.each(QandAs, function (i, p) {
+                var xvalue = p.Id;
+                strResult += "<tr><td>" + p.Id + "</td><td> " + p.Question + "</td><td>" + p.Answer + "</td><td>" + p.Category + "<button class='float-right' value='" + p.Id + "' id='changequestion'>Endre</button><button id='deleteId' value='" + xvalue + "' onclick='deleteQuestion()' class='float-right'> Slett</button ></td ></tr > ";
+   
+            });
+
+            strResult += "</table>";
+            $("#divResult").html(strResult);
+        }
+
+    
+        function HentPerson() {
+            var id = $('#txtPersId').val();
+            $.ajax({
+                url: '/api/Person/' + id,
+                type: 'GET',
+                success: function (data) {
+                    VisEn(data);
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                }
+            });
+        }
+
+        function VisEn(person) {
+            var p = person;
+            var strResult = "<table class='table table-bordered'><th>Id</th><th>Fornavn</th><th>Etternavn</th><th>Adresse</th><th>Postnr</th><th>Poststed</th><th>Telefonnr</th><th>Epost</th>";
+            strResult += "<tr><td>" + p.Id + "</td><td> " + p.Fornavn + "</td><td>" + p.Etternavn + "</td><td>";
+            strResult += p.Adresse + "</td><td>" + p.Postnr + "</td><td>" + p.Poststed + "</td><td>";
+            strResult += p.Telefonnr + "</td><td>" + p.Epost + "</td></tr>";
+            strResult += "</table>";
+            $("#divResult").html(strResult);
+        }
+
+        function LeggTilPerson() {
+            var person = {
+                Fornavn: $('#txtFornavn').val(),
+                Etternavn: $('#txtEtternavn').val(),
+                Adresse: $('#txtAdresse').val(),
+                Postnr: $('#txtPostnr').val(),
+                Poststed: $('#txtPoststed').val(),
+                Telefonnr: $('#txtTelefonnr').val(),
+                Epost: $('#txtEpost').val()
+            };
+            $.ajax({
+                url: '/api/Person/',
+                type: 'POST',
+                data: person,
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    VisAlle(data);
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                }
+            });
+        }
+
+
+        //Mulighet for å slette spørsmål
+        function deleteQuestion() {
+            var id = $('#deleteId').val()
+            console.log(id);
+
+            $.ajax({
+                url: '/api/Api/' + id,
+                type: 'DELETE',
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    GetAllQuestions();
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                }
+            });
+        }
+
+
+
+
+    </script>
+
+    <!--Gjemmer sidemeny ved klikk-->
+    <script>
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    </script>
+
+
+
+</body>
+</html>

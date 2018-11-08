@@ -14,10 +14,6 @@
 </head>
 
 <body>
-
-
-    
-
     <div id="wrapper" class="toggled">
 
 
@@ -32,13 +28,15 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">Ofte stilte spørsmål</a>
+                    <a href="index.html">Spørsmål og svar</a>
                 </li>
                 <li>
-                    <a href="#sendquestion">Kategorier</a>
+
+                    <a href="QuestionPage.html">Send inn spørsmål</a>
                 </li>
                 <li>
-                    <a href="#sendquestion">Send inn spørsmål</a>
+
+                    <a href="Administration.html">Administrer spørsmål</a>
                 </li>
 
 
@@ -50,7 +48,7 @@
         <!--<a href="#page-content-wrapper" class="btn btn-primary" id="fixedbutton">Til toppen</a>-->
 
         <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Meny</a>
-       
+
 
         <div id="page-content-wrapper">
 
@@ -63,7 +61,6 @@
                         <button type="button" class="btn btn-dark" onclick="GetFrequentlyaskedquestions()">
 
                             <h3 class="title">Ofte stilte spørsmål</h3>
-                            <!--<img src="https://png.icons8.com/metro/1600/purchase-order.png" height="128" width="128" />-->
                             <p>Her finner du ofte stilte spørsmål</p>
 
                         </button>
@@ -73,7 +70,6 @@
                         <button type="button" class="btn btn-dark" onclick="setCategoryOrder()">
 
                             <h3 class="title">Ordre</h3>
-                            <!--<img src="https://png.icons8.com/metro/1600/purchase-order.png" height="128" width="128" />-->
                             <p>Her finne du svar på spørsmål relatert til dine ordre.</p>
 
                         </button>
@@ -83,7 +79,6 @@
                         <button type="button" class="btn btn-dark" onclick="setCategoryMovie()">
 
                             <h3 class="title">Filmer</h3>
-                            <!--<img src="https://cdn1.iconfinder.com/data/icons/shoping-cart/84/ShoppingCart22-512.png" height="128" width="128" />-->
                             <p>Kjøp av film og angrerett.</p>
 
                         </button>
@@ -93,12 +88,14 @@
                         <button type="button" class="btn btn-dark" onclick="setCategoryAccount()">
 
                             <h3 class="title">Konto</h3>
-                            <!--<img src="https://image.flaticon.com/icons/svg/61/61205.svg" height="128" width="128" />-->
                             <p>Konto og kunderelaterte spørsmål.</p>
 
                         </button>
 
-                        <div class="text-center"> Finner du ikke det du leter etter? Trykk her</div>
+                        <div class="text-center">
+                            Finner du ikke det du leter etter?
+                            <button onclick="location.href='QuestionPage.html'">Send inn spørsmål</button>
+                        </div>
 
                     </div>
                 </div>
@@ -109,129 +106,13 @@
                         <br />
 
                         <div class="" id="divResult"></div>
-
-
-
-
                     </div>
                 </div>
             </div>
-
-            <div class="row">
-
-                
-
-            </div>
-
-                <div class="container">
-                    <div class="row">
-                        <div class="col">
-
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <div class="border" id="sendquestion">
-                                <h1 class="display-4">Send inn spørsmål</h1>
-                                <table class="table table-bordered" style="border:1px solid black">
-
-                                    <tr><td>Epost:</td><td><input style="width:370px;" type="text" id="txtEmail" /></td></tr>
-
-                                    <tr><td>Spørsmål: </td> <td><textarea id="newquestion" rows="4" cols="50"></textarea></td></tr>
-
-
-                                </table>
-                                <div class="text-center">
-                                    <button onclick="Savequestion()" class="btn btn-primary">Send inn spørsmål</button>
-
-
-                                </div>
-
-                            </div>
-
-
-
-
-
-
-
-                        </div>
-                    </div>
-
-
-
-
-                </div>
-                <div class="col">
-
-                    
-                    <p>Her vil du finne ofte stilte spørsmål. Finne du ikke svaret du er ute etter, vennligst ta kontakt ved bruk av innsendings skjema nederst på siden.</p>
-
-
-
-
-
-                    <br />
-                    <br />
-
-
-
-
-
-                </div>
-           
-
         </div>
 
-            <!-- /2 kolonner side by side -->
-
-            <div class="container">
-                <div class="row">
-
-                    <div class="col">
-
-                        
-                    </div>
-
-
-
-                    <div class="col">
-
-                        <div class="row">
-
-
-                        </div>
-                        <div class="row">
-
-
-
-
-                            <div class="container-fluid">
-
-                               
-
-
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
+    </div> <!--Denne avslutter wrapper-->
+    
 
 
 
@@ -245,190 +126,160 @@
 
 
 
-            <!--stemme med tommel og ahref link til skjema?-->
-
-            
-
-            <!--<button onclick="LeggTilPerson()" class="btn btn-primary">Legg til person</button>
-    <button onclick="HentAllePersoner()" class="btn btn-primary">Vis alle</button><br /><br />
-    <button onclick="HentPerson()" class="btn btn-primary">Vis Person</button> Person ID <input type="text" id="txtPersId" />
-    <button onclick="SlettPerson()" class="btn btn-danger">Slett Person</button> Person ID <input type="text" id="txtSlettId" />-->
-
-
-
-        </div> <!--Denne avslutter den grå bakgrunnen-->
-
-        
-
-        
-
-        
-
-
-
-
-            </div>
-
-            <!-- /#page-content-wrapper -->
-            <!-- /#wrapper -->
-            <script>
-                $("#menu-toggle").click(function (e) {
-                    e.preventDefault();
-                    $("#wrapper").toggleClass("toggled");
-                });
-            </script>
-
-            <script type="text/javascript">
-                var category = "";
-
-                //$(function () {
-                //    GetAllQuestions();
-                //});
-
-                function setCategoryMovie() {
-                    category = "Movies";
-                    GetAllQuestions();
-                }
-
-                function setCategoryOrder() {
-                    category = "Order";
-                    GetAllQuestions();
-                }
-
-                function setCategoryAccount() {
-                    category = "Account";
-                    GetAllQuestions();
-                }
-
-                function GetAllQuestions() {
-                    $.ajax({
-                        url: '/api/Api',
-                        type: 'GET',
-                        success: function (data) {
-                            GetAll(data);
-                        },
-                        error: function (x, y, z) {
-                            alert(x + '\n' + y + '\n' + z);
-                        }
-                    });
-                }
-
-                function GetAll(QandAs) {
-                    var strResult = "<table class='table'>";
-
-
-                    $.each(QandAs, function (i, p) {
-                        console.log(p.Category);
-                        if (p.Category === category) {
-                            strResult += "<tr><td><button class='btn btn-secondary dropdown-toggle' type='button' id='dropdownMenuButton' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='width:100%'>"
-                                + p.Question + p.Category + "<div class='dropdown-menu' style='width:100%; height:80px; background:lightgrey'; aria-labelledby='dropdownMenuButton'><a class='dropdown - item' style='width:100%' >" + p.Answer + "</a></div></td></tr>";
-                        }
-                        });
-
-                    strResult += "</button></table>";
-                    $("#divResult").html(strResult);
-                }
-
+    <!--<script>
+        function displayQuestionform() {
+            hidedivResult();
+            var x = document.getElementById("sendquestion");
+            if (x.style.display === "none") {
+                x.style.display = "block";
                 
+            } else {
+                x.style.display = "none";
+            }
+        }
+    </script>
+
+    <script>
+        function hidequestionform() {
+            var x = document.getElementById("sendquestion");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+    </script>
+
+    <script>
+        function Showmsg() {
+            var x = document.getElementById("questionsent");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+                setTimeout("Showmsg()", 6000);
+            } else {
+                x.style.display = "none";
+            }
+        }
+    </script>
+
+    <script>
+        function hidedivResult() {
+            var x = document.getElementById("divResult");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+    </script>-->
+
+
+    <!--Gjemmer sidemeny ved klikk-->
+    <script>
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    </script>
+
+    <script type="text/javascript">
+        var category = "";
+
+        //$(function () {
+        //    GetFrequentlyAskedQuestions();
+        //});
 
 
 
-                function Savequestion() {
-                    //var newQuestion = $('#newquestion').val();
-                    var newQuestion = { Question: $('#newquestion').val()};
+        function setCategoryMovie() {
+            
+            category = "Movies";
+            GetAllQuestions();
+        }
 
-                    $.ajax({
-                        url: '/api/Api/',
-                        type: 'POST',
-                        data: JSON.stringify(newQuestion),
-                        contentType: "application/json;charset=utf-8",
-                        success: function (data) {
+        function setCategoryOrder() {
+            category = "Order";
+            GetAllQuestions();
+        }
 
-                            //returner innsendt spørsmål
-                            GetAllQuestions(data);
-                        },
-                        error: function (x, y, z) {
-                            alert(x + '\n' + y + '\n' + z);
-                        }
-                    });
+        function setCategoryAccount() {
+            category = "Account";
+            GetAllQuestions();
+        }
+
+        function GetAllQuestions() {
+            $.ajax({
+                url: '/api/Api',
+                type: 'GET',
+                success: function (data) {
+
+                    GetAll(data);
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
                 }
+            });
+        }
+
+        function GetAll(QandAs) {
+            var strResult = "<table class='table'>";
 
 
+            $.each(QandAs, function (i, p) {
 
-
-
-
-
-
-
-
-                function HentAllePersoner() {
-                    $.ajax({
-                        url: '/api/Person',
-                        type: 'GET',
-                        success: function (data) {
-                            VisAlle(data);
-                        },
-                        error: function (x, y, z) {
-                            alert(x + '\n' + y + '\n' + z);
-                        }
-                    });
+                if (p.Category === category && p.Question !== "") {
+                    strResult += "<tr><td><button class='btn btn-secondary dropdown-toggle' type='button' id='dropdownMenuButton' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='width:100%'>"
+                        + p.Question + p.Category + "<div class='dropdown-menu' style='width:100%; height:80px; background:lightgrey'; aria-labelledby='dropdownMenuButton'><a class='dropdown - item' style='width:100%' >" + p.Answer + "</a></div></td></tr>";
                 }
+            });
 
-                /*  function VisAlle(personer) {
-                      var strResult = "<table class='table table-boarded'><tr><th>Id</th><th>Fornavn</th><th>Etternavn</th><th>Adresse</th><th>Postnr</th><th>Poststed</th><th>Telefonnr</th><th>Epost</th></tr>";
-                      $.each(personer, function (i, p) {
-                          strResult += "<tr><td>" + p.Id+ "</td><td> " + p.Fornavn + "</td><td>"+p.Etternavn + "</td><td>";
-                          strResult += p.Adresse + "</td><td>" + p.Postnr + "</td><td>" + p.Poststed + "</td><td>";
-                          strResult += p.Telefonnr + "</td><td>" + p.Epost + "</td></tr>";
-                      });
-                      strResult += "</table>";
-                      $("#divResult").html(strResult);
-                  }*/
+            strResult += "</button></table>";
+            $("#divResult").html(strResult);
+        }
 
-                function getAQuestion() {
-                    var id = $('#txtPersId').val();
-                    $.ajax({
-                        url: '/api/Api/' + id,
-                        type: 'GET',
-                        success: function (data) {
-                            VisEn(data);
-                        },
-                        error: function (x, y, z) {
-                            alert(x + '\n' + y + '\n' + z);
-                        }
-                    });
+        function getAQuestion() {
+            var id = $('#txtPersId').val();
+            $.ajax({
+                url: '/api/Api/' + id,
+                type: 'GET',
+                success: function (data) {
+                    VisEn(data);
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
                 }
+            });
+        }
 
-                function VisEn(person) {
-                    var p = person;
-                    var strResult = "<table class='table table-bordered'><th>Id</th><th>Fornavn</th><th>Etternavn</th><th>Adresse</th><th>Postnr</th><th>Poststed</th><th>Telefonnr</th><th>Epost</th>";
-                    strResult += "<tr><td>" + p.Id + "</td><td> " + p.Fornavn + "</td><td>" + p.Etternavn + "</td><td>";
-                    strResult += p.Adresse + "</td><td>" + p.Postnr + "</td><td>" + p.Poststed + "</td><td>";
-                    strResult += p.Telefonnr + "</td><td>" + p.Epost + "</td></tr>";
-                    strResult += "</table>";
-                    $("#divResult").html(strResult);
+        function VisEn(person) {
+            var p = person;
+            var strResult = "<table class='table table-bordered'><th>Id</th><th>Fornavn</th><th>Etternavn</th><th>Adresse</th><th>Postnr</th><th>Poststed</th><th>Telefonnr</th><th>Epost</th>";
+            strResult += "<tr><td>" + p.Id + "</td><td> " + p.Fornavn + "</td><td>" + p.Etternavn + "</td><td>";
+            strResult += p.Adresse + "</td><td>" + p.Postnr + "</td><td>" + p.Poststed + "</td><td>";
+            strResult += p.Telefonnr + "</td><td>" + p.Epost + "</td></tr>";
+            strResult += "</table>";
+            $("#divResult").html(strResult);
+        }
+
+
+
+        function SlettPerson() {
+            var id = $('#txtSlettId').val()
+
+            $.ajax({
+                url: '/api/Person/' + id,
+                type: 'DELETE',
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    VisAlle(data);
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
                 }
+            });
+        }
 
-
-
-                function SlettPerson() {
-                    var id = $('#txtSlettId').val()
-
-                    $.ajax({
-                        url: '/api/Person/' + id,
-                        type: 'DELETE',
-                        contentType: "application/json;charset=utf-8",
-                        success: function (data) {
-                            VisAlle(data);
-                        },
-                        error: function (x, y, z) {
-                            alert(x + '\n' + y + '\n' + z);
-                        }
-                    });
-                }
-
-            </script>
+    </script>
 
 
 
