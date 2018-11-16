@@ -4,31 +4,29 @@
     <meta charset="utf-8" />
     <title></title>
 
-
     <script src="Scripts/jquery-3.3.1.min.js"></script>
     <link href="Content/bootstrap.css" rel="stylesheet" />
-    <script src="../Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="Scripts/bootstrap.bundle.min.js"></script>
     <link href="Content/bootstrap.min.css" rel="stylesheet" />
     <link href="Content/Simple-sidebar.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
-<body>
+<body style="background-color:black">
+
     <div id="wrapper" class="toggled">
-
-
-
         <!-- Sidebar -->
         <div class="float-md-right" id="sidebar-wrapper">
 
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
-                    <a href="#">
+                    <a href="index.html">
                         Kundeservice Web-Api
                     </a>
                 </li>
-                <li>
-                    <a href="index.html">Spørsmål og svar</a>
+                <li> 
+                    <a href="index.html">Ofte stilte Spørsmål</a>
                 </li>
                 <li>
 
@@ -38,141 +36,110 @@
 
                     <a href="Administration.html">Administrer spørsmål</a>
                 </li>
-
-
-
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->
-        <!-- Page Content -->
-        <!--<a href="#page-content-wrapper" class="btn btn-primary" id="fixedbutton">Til toppen</a>-->
-
+        
+        <!-- Side innhold -->
+        <!--Meny knappen-->
         <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Meny</a>
 
 
+        <!--div content wrapper alt side innhold skal inni denne div-->
         <div id="page-content-wrapper">
 
-            <div class="row">
-                <div class="col-4">
-                    <div class="list-group" id="list-tab" role="tablist">
 
-                        <h1 class="display-4 text-center">Velg Kategori</h1>
 
-                        <button type="button" class="btn btn-dark" onclick="GetFrequentlyaskedquestions()">
+            <div class="jumbotron">
+                <h3>Ofte Stilte Spørsmål</h3>
+                <p>
+                    Her vil du finne ofte stilte spørsmål og svar på ting du kanskje lurer på. <br /><br />
+                    Finner du ikke svar på det du leter etter?
+                    <button type="button" class="btn btn-outline-dark" onclick="location.href='QuestionPage.html'">Send inn spørsmål</button>
+                </p>
 
-                            <h3 class="title">Ofte stilte spørsmål</h3>
-                            <p>Her finner du ofte stilte spørsmål</p>
+                <div id="accordion">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
 
-                        </button>
 
-                        <br />
+                            <h5 class="">Velg Kategori </h5>
+                            
+                            <div class="btn-toolbar" id="hideCategory">
+                                <!--Knapp som velger kategori: Konto-->
+                                <h5 class="">
+                                    <button onclick="setCategoryAccount()" style="width:300px; margin:9px" type="button" class="btn btn-dark" data-toggle="" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        <h5 class="title">Konto</h5>
+                                        <p style="font-size:15px">Konto og kunderelaterte spørsmål.</p><br />
+                                    </button>
+                                </h5>
 
-                        <button type="button" class="btn btn-dark" onclick="setCategoryOrder()">
+                                <!--Knapp som velger kategori: Ordre-->
+                                <h5 class="">
+                                    <button onclick="setCategoryOrder()" style="width:300px; margin:9px" type="button" class="btn btn-dark" data-toggle="" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        <h5 class="title">Ordre</h5>
+                                        <p style="font-size:15px">Her finne du svar på spørsmål<br /> relatert til dine ordre.</p>
+                                    </button>
+                                </h5>
 
-                            <h3 class="title">Ordre</h3>
-                            <p>Her finne du svar på spørsmål relatert til dine ordre.</p>
+                                <!--Knapp som velger kategori: Filmer-->
+                                <h5 class="">
+                                    <button onclick="setCategoryMovie()" style="width:300px; margin:9px" type="button" class="btn btn-dark" data-toggle="" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        <h5 class="title">Filmer</h5>
+                                        <p style="font-size:15px">Kjøp av film og angrerett.</p><br />
+                                    </button>
+                                </h5>
 
-                        </button>
-
-                        <br />
-
-                        <button type="button" class="btn btn-dark" onclick="setCategoryMovie()">
-
-                            <h3 class="title">Filmer</h3>
-                            <p>Kjøp av film og angrerett.</p>
-
-                        </button>
-
-                        <br />
-
-                        <button type="button" class="btn btn-dark" onclick="setCategoryAccount()">
-
-                            <h3 class="title">Konto</h3>
-                            <p>Konto og kunderelaterte spørsmål.</p>
-
-                        </button>
-
-                        <div class="text-center">
-                            Finner du ikke det du leter etter?
-                            <button onclick="location.href='QuestionPage.html'">Send inn spørsmål</button>
+                                <!--Knapp som velger kategori: Annet-->
+                                <h5 class="">
+                                    <button onclick="setCategoryOther()" style="width:300px; margin:9px" type="button" class="btn btn-dark" data-toggle="" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        <h5 class="title">Annet</h5>
+                                        <p style="font-size:15px">Her finner du spørsmål som ikke faller<br/> inn under noen kategori.</p>
+                                    </button>
+                                </h5>
+                            </div>
                         </div>
 
-                    </div>
-                </div>
-                <div class="col-8">
-                    <div class="tab-content" id="nav-tabContent">
-                        <br />
-                        <br />
-                        <br />
 
-                        <div class="" id="divResult"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        <!--Her vises spørsmål og svar fra databasen i #divResult-->
+                        <div id="collapseOne" class="" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body">
+
+                                <!--Data fra api blir sendt hit-->
+                                <div class="" id="divResult"></div>
+
+
+                                <!--Viser et loading ikon frem til dataene er hentet gjennom Api`et-->
+                                <div class="text-center" id="hideme">
+
+                                    <i class="fa fa-spinner fa-spin fa-5x" alt="Loading..."></i>
+                                </div>
+                                <!--<script type="text/javascript">
+                                    $("#loadingicon").hide();
+                                </script>-->
+
+
+
+                            </div>
+                        </div>
+                    </div> <!--div class "card"-->
+
+
+                </div> <!--div class "accordion"-->
+
+
+
+            </div> <!--denne avslutter jumbotron grå bakgrunn-->
+
+        </div> <!--div content wrapper alt side innhold skal inni denne div-->
 
     </div> <!--Denne avslutter wrapper-->
     
+    
+    
+    <!--Script og funksjoner-->
 
-
-
-
-
-
-
-
-
-
-
-
-
-    <!--<script>
-        function displayQuestionform() {
-            hidedivResult();
-            var x = document.getElementById("sendquestion");
-            if (x.style.display === "none") {
-                x.style.display = "block";
-                
-            } else {
-                x.style.display = "none";
-            }
-        }
-    </script>
-
-    <script>
-        function hidequestionform() {
-            var x = document.getElementById("sendquestion");
-            if (x.style.display === "none") {
-                x.style.display = "block";
-            } else {
-                x.style.display = "none";
-            }
-        }
-    </script>
-
-    <script>
-        function Showmsg() {
-            var x = document.getElementById("questionsent");
-            if (x.style.display === "none") {
-                x.style.display = "block";
-                setTimeout("Showmsg()", 6000);
-            } else {
-                x.style.display = "none";
-            }
-        }
-    </script>
-
-    <script>
-        function hidedivResult() {
-            var x = document.getElementById("divResult");
-            if (x.style.display === "none") {
-                x.style.display = "block";
-            } else {
-                x.style.display = "none";
-            }
-        }
-    </script>-->
-
+    <!--On start up script-->
 
     <!--Gjemmer sidemeny ved klikk-->
     <script>
@@ -183,29 +150,15 @@
     </script>
 
     <script type="text/javascript">
+        //variabel som setter kategori for spørsmål
         var category = "";
 
-        //$(function () {
-        //    GetFrequentlyAskedQuestions();
-        //});
+        //Loading ikon som kommer etter man velger kategori, ikke synlig før man velger kategori
+        $("#hideme").hide();
 
-
-
-        function setCategoryMovie() {
-            
-            category = "Movies";
-            GetAllQuestions();
-        }
-
-        function setCategoryOrder() {
-            category = "Order";
-            GetAllQuestions();
-        }
-
-        function setCategoryAccount() {
-            category = "Account";
-            GetAllQuestions();
-        }
+        $(function () {
+            //GetAllQuestions();
+        });
 
         function GetAllQuestions() {
             $.ajax({
@@ -221,57 +174,75 @@
             });
         }
 
-        function GetAll(QandAs) {
-            var strResult = "<table class='table'>";
 
+        
+        function GetAll(QandAs) {
+            
+
+            var strResult = "<div id='accordion'>";
 
             $.each(QandAs, function (i, p) {
 
                 if (p.Category === category && p.Question !== "") {
-                    strResult += "<tr><td><button class='btn btn-secondary dropdown-toggle' type='button' id='dropdownMenuButton' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='width:100%'>"
-                        + p.Question + p.Category + "<div class='dropdown-menu' style='width:100%; height:80px; background:lightgrey'; aria-labelledby='dropdownMenuButton'><a class='dropdown - item' style='width:100%' >" + p.Answer + "</a></div></td></tr>";
+                    var knappid = p.Id;
+
+
+                    strResult += "<div class='card'><div class='card-header' id='headingTwo'>";
+                    strResult += "<h5 class='mb-0'><button class='btn btn-link' data-toggle='collapse' data-target='#collapseTwo' aria-expanded='true' aria-controls='collapseTwo' style='color:black; font-size: 20px'>";
+
+                    //spørsmål hentet gjennom Api
+                    strResult += p.Question;
+                    strResult += "</button></h5></div>";
+
+                    //svar hentet gjennom Api
+                    strResult += "<div id='collapseTwo' aria-labelledby='headingTwo' data-parents='#accordion'>";
+                    strResult += "<div class='card-body'>";
+                    strResult += p.Answer;
+
+                    //avstemmings knapper med ikoner for å rate spørsmål og svar
+                    //ikoner er hentet fra https://www.w3schools.com/icons/fontawesome_icons_intro.asp
+                    strResult += "<div class='float-right'><button value='" + knappid + "' onclick='voteDownAnswer(this.value)' class='fa fa-thumbs-o-down fa-2x'></button>" + " ";
+                    strResult += p.Votecounter + " ";
+                    strResult += "<button value='" + knappid + "' onclick='voteUpAnswer(this.value)' class='fa fa-thumbs-o-up fa-2x'> </button></div>";
+
+                    strResult += "</div></div></div>"
                 }
             });
 
-            strResult += "</button></table>";
+            strResult += "</div>";
+            
             $("#divResult").html(strResult);
+
+            //Skrur av loading ikonet når dataene er ferdig lastet
+            $("#hideme").hide();  
+
         }
 
-        function getAQuestion() {
-            var id = $('#txtPersId').val();
+        
+
+
+        //Funksjon som stemmer ned/ trekker ifra poeng til spørsmål/svar hvis man er misfornøyd med spørsmålet/svaret, utfører et PUT kall som lagrer avstemmingen til databasen.
+        function voteDownAnswer(val) {
+
+            //Sier at type = 1 som betyr at spørsmål og svar skal få en positiv stemme
+            var type = 0;
+            console.log(val + type);
+
+
+            var newVote = {
+                Id: val, VoteType: type,
+            }
+
+            //Kaller på Api`ets PUT metode i ApiController
             $.ajax({
-                url: '/api/Api/' + id,
-                type: 'GET',
-                success: function (data) {
-                    VisEn(data);
-                },
-                error: function (x, y, z) {
-                    alert(x + '\n' + y + '\n' + z);
-                }
-            });
-        }
-
-        function VisEn(person) {
-            var p = person;
-            var strResult = "<table class='table table-bordered'><th>Id</th><th>Fornavn</th><th>Etternavn</th><th>Adresse</th><th>Postnr</th><th>Poststed</th><th>Telefonnr</th><th>Epost</th>";
-            strResult += "<tr><td>" + p.Id + "</td><td> " + p.Fornavn + "</td><td>" + p.Etternavn + "</td><td>";
-            strResult += p.Adresse + "</td><td>" + p.Postnr + "</td><td>" + p.Poststed + "</td><td>";
-            strResult += p.Telefonnr + "</td><td>" + p.Epost + "</td></tr>";
-            strResult += "</table>";
-            $("#divResult").html(strResult);
-        }
-
-
-
-        function SlettPerson() {
-            var id = $('#txtSlettId').val()
-
-            $.ajax({
-                url: '/api/Person/' + id,
-                type: 'DELETE',
+                url: '/api/Api/',
+                type: 'PUT',
+                data: JSON.stringify(newVote),
                 contentType: "application/json;charset=utf-8",
                 success: function (data) {
-                    VisAlle(data);
+
+                    GetAllQuestions(data);
+
                 },
                 error: function (x, y, z) {
                     alert(x + '\n' + y + '\n' + z);
@@ -279,11 +250,58 @@
             });
         }
 
+
+
+        //Funksjon som stemmer opp/ gir poeng til spørsmål/svar, utfører et PUT kall som lagrer avstemmingen til databasen.
+        function voteUpAnswer(val) {
+
+            //Sier at type = 1 som betyr at spørsmål og svar skal få en positiv stemme
+            var type = 1;
+
+            var newVote = {
+                Id: val, VoteType: type,
+            }
+
+            $.ajax({
+                url: '/api/Api/',
+                type: 'PUT',
+                data: JSON.stringify(newVote),
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+
+                    GetAllQuestions(data);
+
+                },
+                error: function (x, y, z) {
+                    alert(x + '\n' + y + '\n' + z);
+                }
+            });
+        }
+
+        //funksjoner ved buttonclick setter valgt Kategori og velger riktig spørsmål fra valgt kategori
+        function setCategoryMovie() {
+            $("#hideme").show();
+            category = "Movies";
+            GetAllQuestions();
+        }
+
+        function setCategoryOrder() {
+            $("#hideme").show();
+            category = "Order";
+            GetAllQuestions();
+        }
+
+        function setCategoryAccount() {
+            $("#hideme").show();
+            category = "Account";
+            GetAllQuestions();
+        }
+
+        function setCategoryOther() {
+            $("#hideme").show();
+            category = "Other";
+            GetAllQuestions();
+        }
     </script>
-
-
-
-
-
 </body>
 </html>

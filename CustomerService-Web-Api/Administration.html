@@ -4,31 +4,29 @@
     <meta charset="utf-8" />
     <title></title>
 
-
     <script src="Scripts/jquery-3.3.1.min.js"></script>
     <link href="Content/bootstrap.css" rel="stylesheet" />
-    <script src="../Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="Scripts/bootstrap.bundle.min.js"></script>
     <link href="Content/bootstrap.min.css" rel="stylesheet" />
     <link href="Content/Simple-sidebar.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
-<body>
+<body style="background-color:black">
+
     <div id="wrapper" class="toggled">
-
-
-
         <!-- Sidebar -->
         <div class="float-md-right" id="sidebar-wrapper">
 
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
-                    <a href="#">
+                    <a href="index.html">
                         Kundeservice Web-Api
                     </a>
                 </li>
                 <li>
-                    <a href="index.html">Spørsmål og svar</a>
+                    <a href="index.html">Ofte stilte Spørsmål</a>
                 </li>
                 <li>
 
@@ -38,9 +36,6 @@
 
                     <a href="Administration.html">Administrer spørsmål</a>
                 </li>
-
-
-
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -49,51 +44,88 @@
 
         <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Meny</a>
 
-
         <div id="page-content-wrapper">
 
             <div class="row">
                 <div class="container">
-                    <h2>Personregister via WEB-API REST</h2>
-                    <div>
-                        <table class="table table-bordered">
-                            <tr><td>Fornavn:</td><td><input type="text" id="txtFornavn" /></td></tr>
-                            <tr><td>Etternavn:</td><td><input type="text" id="txtEtternavn" /></td></tr>
-                            <tr><td>Adresse:</td><td><input type="text" id="txtAdresse" /></td></tr>
-                            <tr><td>Postnr:</td><td><input type="text" id="txtPostnr" /></td></tr>
-                            <tr><td>Poststed:</td><td><input type="text" id="txtPoststed" /></td></tr>
-                            <tr><td>Telefonnr:</td><td><input type="text" id="txtTelefonnr" /></td></tr>
-                            <tr><td>Epost:</td><td><input type="text" id="txtEpost" /></td></tr>
-                        </table>
-                        <button onclick="LeggTilPerson()" class="btn btn-primary">Legg til person</button>
-                        <button onclick="HentAllePersoner()" class="btn btn-primary">Vis alle</button><br /><br />
-                        <button onclick="HentPerson()" class="btn btn-primary">Vis Person</button> Person ID <input type="text" id="txtPersId" />
-                        <button onclick="deleteQuestion()" class="btn btn-danger">Slett Person</button> Person ID <input type="text" id="txtSlettId" />
+                    <div class="jumbotron">
+                        <h1>Administrer spørsmål og svar</h1>
+                        <div>
+                            <table class="table table-bordered" id="datatable">
+                                <tr>
+                                    <td>Kategori:</td>
+                                    <td>
+                                        <select name="Kategori" id="categoryvalue">
+                                            <option value="Account">Konto</option>
+                                            <option value="Order">Ordre</option>
+                                            <option value="Movies">Filmer</option>
+                                        </select>
+                                    </td>
+                                    <td>Id: </td>
+                                    <td><input id="currentIdforItem" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Spørsmål:</td>
+                                    <td><textarea class="" id="Qid" rows="4" cols="50"></textarea></td>
+                                    <td>Svar:</td>
+                                    <td><textarea class="" id="AnswerId" rows="4" cols="50"></textarea><br /><button onclick="AddQuestion()" class="btn btn-dark float-right">Lagre</button></td>
+                                </tr>
+
+
+                            </table>
+                            Spørsmål ID:<input type="text" id="singlequestionID" />
+                            <button onclick="GetOneQuestion()" class="btn btn-dark">Hent spørsmål med id </button>
+                            <button onclick="deleteQuestion()" class="btn btn-outline-dark">Slett</button>
+                            <button onclick="clearbutton()" class="btn btn-outline-dark">Tøm felt</button>
+
+                            
+
+                            <div class="float-right">
+                                <!--<button onclick="GetAllQuestions()" class="btn btn-outline-primary">Vis alle</button>-->
+                            </div>
+
+                        </div>
+
+                        <h4 class="text-center">Data returnert fra Web API:</h4>
+                        
+
+                        <!--Dataene fra Api`et blir vist her-->
+                        <div id="divResult">
+                            <!--Viser et loading ikon frem til dataene er hentet gjennom Api`et-->
+                            <div class="text-center" id="hideme">
+                                <i class="fa fa-spinner fa-spin fa-5x" alt="Loading..."></i>
+                            </div>
+                        </div>
+
                     </div>
-
-                    <h3>Dataene returnert fra Web API:</h3>
-                    <div id="divResult"></div>
-
                 </div>
-
-
-
             </div>
         </div>
 
     </div> <!--Denne avslutter wrapper-->
 
 
+
+    <!--Script og funksjoner-->
     <script type="text/javascript">
+
+        //Script som kjører ved oppstart
         $(function () {
+            
             GetAllQuestions();
         });
 
+        //Henter alle spørsmål og svar samt alle datafeltene fra databasen gjennom Api`et
         function GetAllQuestions() {
             $.ajax({
                 url: '/api/Api',
                 type: 'GET',
                 success: function (data) {
+                    var emptyfields = "";
+
+                    $("#Qid").text(emptyfields);
+                    $("#AnswerId").text(emptyfields);
+                    $("#currentId").text(emptyfields);
 
                     GetAll(data);
                 },
@@ -103,28 +135,49 @@
             });
         }
 
+        //Dataene som er hentet fra Api`et blir lagt i en table class som sendes til en div med id #divResult i html dokumentet
         function GetAll(QandAs) {
-            var strResult = "<table class='table table-boarded'><tr><th>Id</th><th>Spørsmål</th><th>Svar</th><th>Kategori</th></tr>";
 
+            $("#hideme").show();
+
+            var strResult = "<table class='table table-boarded'><tr><th>Id</th><th>Spørsmål</th><th>Svar</th><th>VoteCount</th><th>Kategori</th></tr>";
+            
 
             $.each(QandAs, function (i, p) {
-                var xvalue = p.Id;
-                strResult += "<tr><td>" + p.Id + "</td><td> " + p.Question + "</td><td>" + p.Answer + "</td><td>" + p.Category + "<button class='float-right' value='" + p.Id + "' id='changequestion'>Endre</button><button id='deleteId' value='" + xvalue + "' onclick='deleteQuestion()' class='float-right'> Slett</button ></td ></tr > ";
-   
+
+                strResult += "<tr><td>" + p.Id + "</td><td>" + p.Question + "</td><td>" + p.Answer + "</td><td>" + p.Votecounter + "</td><td>" + p.Category + "</td></tr > ";
+
             });
 
             strResult += "</table>";
+
+            
             $("#divResult").html(strResult);
+
+            //Loading ikon skrus av når dataene er ferdig lastet
+            $("#hideme").hide();
         }
 
-    
-        function HentPerson() {
-            var id = $('#txtPersId').val();
+        //Funksjon som tømmer feltene på administarsjonssiden
+        function clearbutton() {
+            $("textarea").val("");
+            $("#currentIdforItem").val("");
+        }
+
+        //Henter et spørsmål med valgt id gjennom /api/Api/ + id og tar dataene inn i textarea feltene så man redigere på innholdet
+        function GetOneQuestion() {
+            var id = $('#singlequestionID').val();
+            $("textarea").val("");
+
             $.ajax({
-                url: '/api/Person/' + id,
+                url: '/api/Api/' + id,
                 type: 'GET',
                 success: function (data) {
-                    VisEn(data);
+
+                    $("#currentIdforItem").val(id);
+                    $("#categoryvalue").val(data.Category).change();
+                    $("#Qid").val(data.Question);
+                    $("#AnswerId").val(data.Answer);
                 },
                 error: function (x, y, z) {
                     alert(x + '\n' + y + '\n' + z);
@@ -132,33 +185,43 @@
             });
         }
 
-        function VisEn(person) {
-            var p = person;
-            var strResult = "<table class='table table-bordered'><th>Id</th><th>Fornavn</th><th>Etternavn</th><th>Adresse</th><th>Postnr</th><th>Poststed</th><th>Telefonnr</th><th>Epost</th>";
-            strResult += "<tr><td>" + p.Id + "</td><td> " + p.Fornavn + "</td><td>" + p.Etternavn + "</td><td>";
-            strResult += p.Adresse + "</td><td>" + p.Postnr + "</td><td>" + p.Poststed + "</td><td>";
-            strResult += p.Telefonnr + "</td><td>" + p.Epost + "</td></tr>";
+        //Funksjon som viser et spørsmål
+        function ShowOneQuestion(QandAs) {
+            var p = QandAs;
+
+            var strResult = "<table class='table table-boarded'><tr><th>Id</th><th>Spørsmål</th><th>Svar</th><th>Kategori</th></tr>";
+
+            strResult += "<tr><td><input type='text' id='" + p.ID + "' value='" + p.Id + "'></td><td><input type='text' id='" + p.Question + "' value='" + p.Question + "'></td><td>" + p.Answer + "</td><td>" + p.Category + "<button class='float-right' value='" + p.Id + "' id='changequestion'>Endre</button><button class='myBtn' id='thisbutton' value='" + p.Id + "' onclick='deleteQuestion()' class='float-right'> Slett</button ></td ></tr > ";
+
             strResult += "</table>";
             $("#divResult").html(strResult);
         }
 
-        function LeggTilPerson() {
-            var person = {
-                Fornavn: $('#txtFornavn').val(),
-                Etternavn: $('#txtEtternavn').val(),
-                Adresse: $('#txtAdresse').val(),
-                Postnr: $('#txtPostnr').val(),
-                Poststed: $('#txtPoststed').val(),
-                Telefonnr: $('#txtTelefonnr').val(),
-                Epost: $('#txtEpost').val()
-            };
+        //Funksjon som lar administrator legge inn nytt spørsmål eller endre. Ved nytt spørsmål har ikke spørsmålet id og elsen vil derfor kjøre.
+        //Har spørsmålet en id betyr det at administrator endrer på dataene for valgt spørsmål
+        function AddQuestion() {
+
+            if ($('#currentIdforItem').val() != 0) {
+                var newquestion = {
+                    Id: $('#currentIdforItem').val(), Category: $('#categoryvalue').val(), Question: $('#Qid').val(), Answer: $('#AnswerId').val(),
+                };
+            } else {
+                var newquestion = {
+                    Category: $('#categoryvalue').val(), Question: $('#Qid').val(), Answer: $('#AnswerId').val(),
+                };
+            }
+
             $.ajax({
-                url: '/api/Person/',
+                url: '/api/Api/',
                 type: 'POST',
-                data: person,
+                data: JSON.stringify(newquestion),
                 contentType: "application/json;charset=utf-8",
                 success: function (data) {
-                    VisAlle(data);
+
+                    
+                    GetAllQuestions(data);
+                    $("textarea").val("");
+                    $("#currentIdforItem").val("");
                 },
                 error: function (x, y, z) {
                     alert(x + '\n' + y + '\n' + z);
@@ -166,17 +229,19 @@
             });
         }
 
-
-        //Mulighet for å slette spørsmål
+        //Funksjon for å slette spørsmål med valgt id /api/Api/ + id
         function deleteQuestion() {
-            var id = $('#deleteId').val()
-            console.log(id);
+
+            var id = document.getElementById("singlequestionID").value;
 
             $.ajax({
                 url: '/api/Api/' + id,
                 type: 'DELETE',
                 contentType: "application/json;charset=utf-8",
                 success: function (data) {
+
+                    $("textarea").val("");
+                    $("#currentIdforItem").val("");
                     GetAllQuestions();
                 },
                 error: function (x, y, z) {
@@ -184,9 +249,6 @@
                 }
             });
         }
-
-
-
 
     </script>
 
@@ -197,8 +259,6 @@
             $("#wrapper").toggleClass("toggled");
         });
     </script>
-
-
 
 </body>
 </html>

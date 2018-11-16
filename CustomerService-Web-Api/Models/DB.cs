@@ -1,6 +1,7 @@
 ﻿using CustomerService_Web_Api.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 
@@ -9,9 +10,9 @@ namespace CustomerService_Web_Api.Models
 {
     public class DB
     {
-        QAContext db = new QAContext();
+        DBContext db = new DBContext();
 
-
+        //Metode som henter all dataen fra databasen 
         public List<QandA> getAllQuestions()
         {
             List<QandA> questionAndAnswer = (from p in db.QandAs
@@ -21,33 +22,86 @@ namespace CustomerService_Web_Api.Models
                                              Id = p.Id,
                                              Question = p.Question,
                                              Answer = p.Answer,
-                                             Category = p.Category
+                                             Category = p.Category,
+                                             Votecounter = p.Votecounter
                                              
                                          }).ToList();
             return questionAndAnswer;
         }
 
+        //Metode som lagrer spørsmål fra kunden gjort fra QuestionPage.html og lagrer det i databasen.
         public void savequestion(QandA innQuestion)
         {
+            var id = innQuestion.Id;
+
             try
             {
-                
-                
-                var newQuestion = new QA();
-                // spørsmål til  databasen
-                newQuestion.Question = innQuestion.Question;
-                newQuestion.Answer = "";
-                newQuestion.Category = innQuestion.Category;
+                bool foundQuestion = db.QandAs.Any(p => p.Id == id);
+                if (foundQuestion)
+                {
+                    QA updatequestion = db.QandAs.Find(id);
 
-                db.QandAs.Add(newQuestion);
-                db.SaveChanges();
+                    updatequestion.Question = innQuestion.Question;
+                    updatequestion.Answer = innQuestion.Answer;
+                    updatequestion.Category = innQuestion.Category;
+                    updatequestion.Votecounter = innQuestion.Votecounter + 1;
+
+                    db.SaveChanges();
+                }
+                else
+                {
+                    QA newQuestion = new QA();
+                    // spørsmål til  databasen
+                    newQuestion.Question = innQuestion.Question;
+                    newQuestion.Answer = "Spørsmål venter på svar fra administrator.";
+                    newQuestion.Category = innQuestion.Category;
+
+                    db.QandAs.Add(newQuestion);
+                    db.SaveChanges();
+                } 
             }
-            catch (Exception feil)
+            catch (Exception ex)
             {
-
+                //Exception handling
             }
         }
 
+        //Metode som gjør at avstemming på spørsmål/svar blir lagret i databasen basert på om kunden var fornøyd med svaret eller ikke.
+        public void VoteAnswer(QandA innVote)
+        {
+            var id = innVote.Id;
+
+            try
+            {
+                bool foundQuestion = db.QandAs.Any(p => p.Id == id);
+                if (foundQuestion && innVote.Votetype == 1)
+                {
+                    QA updatequestion = db.QandAs.Find(id);
+
+                    updatequestion.Votecounter = updatequestion.Votecounter + 1;
+
+                    db.SaveChanges();
+                }
+                else  
+                {
+                    QA updatequestion = db.QandAs.Find(id);
+
+                    updatequestion.Question = updatequestion.Question;
+                    updatequestion.Answer = updatequestion.Answer;
+                    updatequestion.Category = updatequestion.Category;
+                    updatequestion.Votecounter = updatequestion.Votecounter - 1;
+
+                    db.SaveChanges();
+                }
+            }
+            catch(Exception ex)
+            {
+                //Feilhåndtering her
+            }
+
+        }
+
+        //Henter et spørsmål og svar fra databasen for å vises i Administration.html og laster inn dataene i textarea feltene som gir tilgang til å redigere. 
         public QandA getSingleQuestion(int id)
         {
             bool foundQuestion = db.QandAs.Any(p => p.Id == id);
@@ -60,20 +114,22 @@ namespace CustomerService_Web_Api.Models
                                       {
                                           Id = p.Id,
                                           Question = p.Question,
+                                          Answer = p.Answer,
                                           Category = p.Category,
-                                          Answer = ""
+                                          
                                            }).First();
                 return question;
             }
             var emptyquestion = new QandA();
             emptyquestion.Id = 0;
-            emptyquestion.Question = "Fant ikke spørsmål!";
+            emptyquestion.Question = "Ingen spørsmål funnet med denne Id";
+            emptyquestion.Answer = "Ingen spørsmål funnet med denne Id";
             return emptyquestion;
         }
 
 
         
-
+        //Sletter spørsål og svar fra databasen basert på valgt id
         public void deleteQuestion(int id)
         {
             try
@@ -83,116 +139,10 @@ namespace CustomerService_Web_Api.Models
                 db.QandAs.Remove(questionToDelete);
                 db.SaveChanges();
             }
-            catch (Exception feil)
+            catch (Exception ex)
             {
 
             }
         }
-
-
-
-
-
-
-
-
-        //public Person hentEnPerson(int id)
-        //{
-        //    bool funnetPerson = db.Personer.Any(p => p.Id == id);
-        //    if (funnetPerson)
-        //    {
-        //        Person detaljPerson = (from p in db.Personer
-        //                               where p.Id == id
-        //                               select
-        //                                   new Person()
-        //                                   {
-        //                                       Id = p.Id,
-        //                                       Fornavn = p.Fornavn,
-        //                                       Etternavn = p.Etternavn,
-        //                                       Adresse = p.Adresse,
-        //                                       Epost = p.Epost,
-        //                                       Telefonnr = p.Telefonnr,
-        //                                       Postnr = p.Postnr,
-        //                                       Poststed = db.Poststeder.FirstOrDefault(q => q.Postnr == p.Postnr).Poststed
-        //                                   }).First();
-        //        return detaljPerson;
-        //    }
-        //    var tomPerson = new Person();
-        //    tomPerson.Id = 0;
-        //    tomPerson.Fornavn = "Fant ikke personen";
-        //    return tomPerson;
-        //}
-
-        //public void lagrePerson(Person personInn)
-        //{
-        //    try
-        //    {
-        //        // sjekk om postnr ligger i poststedstabellen
-        //        bool funnet = db.Poststeder.Any(p => p.Postnr == personInn.Postnr);
-        //        if (!funnet)
-        //        { // hvis ikke poststedet som det er endret til ligger i poststedstabellen legg det inn!
-        //            var nyttPoststed = new PostSted()
-        //            {
-        //                Postnr = personInn.Postnr,
-        //                Poststed = personInn.Poststed
-        //            };
-        //            db.Poststeder.Add(nyttPoststed);
-        //            db.SaveChanges();
-        //        }
-        //        var nyPerson = new PersonDb();
-        //        // oppdater personen fra databasen
-        //        nyPerson.Fornavn = personInn.Fornavn;
-        //        nyPerson.Etternavn = personInn.Etternavn;
-        //        nyPerson.Adresse = personInn.Adresse;
-        //        nyPerson.Epost = personInn.Epost;
-        //        nyPerson.Telefonnr = personInn.Telefonnr;
-        //        nyPerson.Postnr = personInn.Postnr;
-
-        //        // NB kan ikke legge inn poststedet her, må finne hele det nye/gamle poststedet og legge det inn i personen.
-        //        nyPerson.Poststed = db.Poststeder.FirstOrDefault(p => p.Postnr == personInn.Postnr);
-        //        db.Personer.Add(nyPerson);
-        //        db.SaveChanges();
-        //    }
-        //    catch (Exception feil)
-        //    {
-
-        //    }
-        //}
-        //public void endrePerson(int id, Person personInn)
-        //{
-        //    try
-        //    {
-        //        // finn personen i databasen
-        //        PersonDb endrePerson = db.Personer.FirstOrDefault(p => p.Id == id);
-        //        // sjekk om den nye postnr ligger i poststedstabellen
-        //        bool funnet = db.Poststeder.Any(p => p.Postnr == personInn.Postnr);
-        //        if (!funnet)
-        //        { // hvis ikke poststedet som det er endret til ligger i poststedstabellen legg det inn!
-        //            var nyttPoststed = new PostSted()
-        //            {
-        //                Postnr = personInn.Postnr,
-        //                Poststed = personInn.Poststed
-        //            };
-        //            db.Poststeder.Add(nyttPoststed);
-        //            db.SaveChanges();
-        //        }
-        //        // oppdater personen fra databasen
-        //        endrePerson.Fornavn = personInn.Fornavn;
-        //        endrePerson.Etternavn = personInn.Etternavn;
-        //        endrePerson.Adresse = personInn.Adresse;
-        //        endrePerson.Epost = personInn.Epost;
-        //        endrePerson.Telefonnr = personInn.Telefonnr;
-
-        //        // NB kan ikke endre postnr her, må finne hele det nye/gamle poststedet og legge det inn i personen.
-        //        endrePerson.Poststed = db.Poststeder.FirstOrDefault(p => p.Postnr == personInn.Postnr);
-
-        //        db.SaveChanges();
-        //    }
-        //    catch (Exception feil)
-        //    {
-
-        //    }
-        //}
-
     }
 }

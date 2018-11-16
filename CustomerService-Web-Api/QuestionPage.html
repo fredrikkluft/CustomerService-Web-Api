@@ -4,31 +4,28 @@
     <meta charset="utf-8" />
     <title></title>
 
-
     <script src="Scripts/jquery-3.3.1.min.js"></script>
     <link href="Content/bootstrap.css" rel="stylesheet" />
-    <script src="../Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="Scripts/bootstrap.bundle.min.js"></script>
     <link href="Content/bootstrap.min.css" rel="stylesheet" />
     <link href="Content/Simple-sidebar.css" rel="stylesheet" />
 </head>
 
-<body>
+<body style="background-color:black">
     <div id="wrapper" class="toggled">
-
-
 
         <!-- Sidebar -->
         <div class="float-md-right" id="sidebar-wrapper">
 
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
-                    <a href="#">
+                    <a href="index.html">
                         Kundeservice Web-Api
                     </a>
                 </li>
                 <li>
-                    <a href="index.html">Spørsmål og svar</a>
+                    <a href="index.html">Ofte stilte Spørsmål</a>
                 </li>
                 <li>
 
@@ -38,9 +35,6 @@
 
                     <a href="Administration.html">Administrer spørsmål</a>
                 </li>
-
-
-
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -50,61 +44,105 @@
         <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Meny</a>
 
 
-        <div id="page-content-wrapper">
+        <div class="float-md-none" id="page-content-wrapper">
 
             <div class="row">
-
 
                 <div class="col-8">
                     <div class="tab-content" id="nav-tabContent">
                         <br />
-                        <div class="border" id="sendquestion">
-                            <h1 class="display-5">Vennligst fyll ut skjema</h1>
+                        <div class="jumbotron">
+                            <div class="" id="sendquestion">
+                                <h1 class="display-5">Vennligst fyll ut skjema</h1>
 
+                                <div class="row">
+                                    <div class="border" style="border:2px solid black"> <p id="questionsent" style="display:none">Takk for at du sendte inn spørsmål. Du blir automatisk sendt videre!<p /></div>
+                                </div>
 
+                                <table class="table table-bordered" style="border:2px solid grey">
 
-                            <div class="row">
-                                <div class="border" > <p id="questionsent" style="display:none">Takk for at du sendte inn spørsmål. Du blir automatisk sendt videre!<p/></div>
+                                    <tr>
+                                        <td class="border" style="border:2px solid grey; font-size:20px">Velg Kategori:</td>
+                                        <td>
+                                            <select name="Kategori" id="categoryvalue2">
+                                                <option value="Account">Konto</option>
+                                                <option value="Order">Ordre</option>
+                                                <option value="Movies">Filmer</option>
+                                                <option value="Other">Annet</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="border" style="border:2px solid grey; font-size:20px">Skriv ditt spørsmål her: </td>
+                                        <td>
+                                            <div id="message" style="color:red"></div>
+                                            <textarea id="newquestion" rows="6" cols="50"></textarea>
+                                            <div>
+                                                <button type="button" class="btn btn-outline-dark" onclick="location.href='index.html'">Tilbake</button>
+                                                <button onclick="SavequestionFromClient()" class="btn btn-dark">Send</button>
+
+                                                <p id="waiting" style="display:none">Sender spørsmål, vennligst vent......</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
-
-                            <table class="table table-bordered" style="border:1px solid black">
-
-                                <tr>
-                                    <td>Velg Kategori:</td>
-                                    <td>
-                                        <select name="Kategori" id="categoryvalue">
-                                            <option value="Account">Konto</option>
-                                            <option value="Order">Ordre</option>
-                                            <option value="Movies">Filmer</option>
-                                            <option value="Other">Annet</option>
-                                        </select>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>Skriv ditt spørsmål her: </td>
-                                    <td>
-                                        <textarea id="newquestion" rows="4" cols="50"></textarea>
-                                        <div><button onclick="Savequestion()" class="btn btn-primary">Send</button><p id="waiting" style="display:none">Sender spørsmål, vennligst vent......</p></div>
-                                    </td>
-                                </tr>
-
-
-                            </table>
-
                         </div>
-
-
-
-
-
                     </div>
                 </div>
             </div>
         </div>
 
     </div> <!--Denne avslutter wrapper-->
+    <!--Script og funksjoner-->
 
+
+    <script type="text/javascript">
+        //funksjon som lagrer spørsmål fra bruker gjennom api sin POST metode, sjekker på frontend om lengden på teksten er minimum 2 bokstaver.
+        //På backend er det regex validering for sikkerhet
+        function SavequestionFromClient() {
+
+            var lengde = $('#newquestion').val().length;
+            console.log(lengde);
+
+            if (lengde > 2 && lengde < 300) {
+                Waitingmsg();
+
+                var newQuestion = {
+                    Question: $('#newquestion').val(), Category: $('#categoryvalue2').val()
+                };
+
+                $.ajax({
+                    url: '/api/Api/',
+                    type: 'POST',
+                    data: JSON.stringify(newQuestion),
+                    contentType: "application/json;charset=utf-8",
+                    success: function (data) {
+                        setTimeout("hidequestionform()", 4000);
+                        location.href = "index.html";
+
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+            } else {
+                var message = "Du må minimum skrive 3 tegn!";
+                $("#message").text(message);
+            }
+        }
+    </script>
+
+    <!--Gjemmer sidemeny ved klikk-->
+    <script>
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    </script>
+
+    <!--Etter innsendt spørsmål gjemmes innsendingsskjemaet-->
     <script>
         function hidequestionform() {
             var x = document.getElementById("sendquestion");
@@ -117,20 +155,7 @@
         }
     </script>
 
-    <script>
-        function Showmsg() {
-            var x = document.getElementById("questionsent");
-            if (x.style.display === "none") {
-                x.style.display = "block";
-                
-
-            } else {
-                x.style.display = "none";
-
-            }
-        }
-    </script>
-
+    <!--Melding som vises for bruker mens spørsmålet blir sendt inn-->
     <script>
         function Waitingmsg() {
             var y = document.getElementById("waiting");
@@ -140,69 +165,26 @@
 
             } else {
                 y.style.display = "none";
-                
-                
+
+
             }
         }
     </script>
 
+    <!--Displayer div som inneholder waitingmsg.-->
+    <script>
+        function Showmsg() {
+            var x = document.getElementById("questionsent");
+            if (x.style.display === "none") {
+                x.style.display = "block";
 
 
+            } else {
+                x.style.display = "none";
 
-
-
-    <script type="text/javascript">
-
-        function Savequestion() {
-
-
-            Waitingmsg();
-
-            
-
-            //var newQuestion = $('#newquestion').val();
-            var newQuestion = {
-                Question: $('#newquestion').val(), Category: $('#categoryvalue').val()
-            };
-
-            $.ajax({
-                url: '/api/Api/',
-                type: 'POST',
-                data: JSON.stringify(newQuestion),
-                contentType: "application/json;charset=utf-8",
-                success: function (data) {
-
-                    
-
-                    setTimeout("hidequestionform()", 4000);
-                    location.href = "index.html";
-                    
-                    
-                    
-                    
-
-
-
-                },
-                error: function (x, y, z) {
-                    alert(x + '\n' + y + '\n' + z);
-                }
-            });
-            
-
-
+            }
         }
     </script>
-
-    <!--Gjemmer sidemeny ved klikk-->
-    <script>
-        $("#menu-toggle").click(function (e) {
-            e.preventDefault();
-            $("#wrapper").toggleClass("toggled");
-        });
-    </script>
-
-
 
 </body>
 </html>

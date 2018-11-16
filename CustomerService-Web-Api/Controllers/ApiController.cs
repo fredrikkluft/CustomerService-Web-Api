@@ -18,75 +18,37 @@ namespace CustomerService_Web_Api.Controllers
             return db.getAllQuestions();
         }
 
-        // GET api/Api/questionId
+        // GET api/Api/ + id
         public QandA Get(int id)
         {
             return db.getSingleQuestion(id);
         }
 
         // POST api/Api
-        
         public List<QandA> Post(QandA newQuestion)
         {
-            db.savequestion(newQuestion);
-            return db.getAllQuestions();
+            if (ModelState.IsValid)
+            {
+                var id = newQuestion.Id;
+                db.savequestion(newQuestion);
+                return db.getAllQuestions();
+            }
+            return null;
+            
         }
 
-        // DELETE api/Person/5
+        // DELETE api/Api/ + id
         public List<QandA> Delete(int id)
         {
-            Debug.WriteLine(id);
             db.deleteQuestion(id);
             return db.getAllQuestions();
         }
 
-
-        //public List<QandA> Post(QandA newquestion)
-        //{
-
-
-
-        //    Debug.WriteLine(newquestion);
-        //    db.savequestion(newquestion);
-        //    return db.getAllQuestions();
-        //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //// GET api/Api
-        //public List<Person> Get()
-        //{
-        //    return db.hentAllePersoner();
-        //}
-
-        // GET api/Person/5
-        //public Person Get(int id)
-        //{
-        //    return db.hentEnPerson(id);
-        //}
-
-
-
-        //// PUT api/Person/5
-        //public List<Person> Put(int id, Person personInn)
-        //{
-        //    // dette api er ikke impelmentert på klient!
-        //    db.endrePerson(id, personInn);
-        //    return db.hentAllePersoner();
-        //}
-
-
+        // PUT api/Api
+        public List<QandA> Put (QandA newVote)
+        {
+            db.VoteAnswer(newVote);
+            return db.getAllQuestions();
+        }
     }
 }
